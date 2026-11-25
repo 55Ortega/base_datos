@@ -1,0 +1,72 @@
+CREATE DATABASE IF NOT EXISTS sicai_trabajo;
+
+USE sicai_trabajo;
+
+-- 1. USUARIO
+CREATE TABLE USUARIO (
+    idUsuario INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL,
+    Correo VARCHAR(100),
+    Rol VARCHAR(50)
+);
+
+-- 2. PROVEEDOR
+CREATE TABLE PROVEEDOR (
+    idProveedor INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL,
+    Telefono VARCHAR(20)
+);
+
+-- 3. PRODUCTO
+CREATE TABLE PRODUCTO (
+    idProducto INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL,
+    Precio DECIMAL(10,2) NOT NULL,
+    Stock INT NOT NULL,
+    idProveedor INT,
+    FOREIGN KEY (idProveedor)
+        REFERENCES PROVEEDOR(idProveedor)
+);
+
+-- 4. VENTA
+CREATE TABLE VENTA (
+    idVenta INT AUTO_INCREMENT PRIMARY KEY,
+    Fecha DATETIME NOT NULL,
+    Total DECIMAL(12,2) NOT NULL,
+    idUsuario INT NOT NULL,
+    FOREIGN KEY (idUsuario)
+        REFERENCES USUARIO(idUsuario)
+);
+
+-- 5. COMPRA
+CREATE TABLE COMPRA (
+    idCompra INT AUTO_INCREMENT PRIMARY KEY,
+    Fecha DATETIME NOT NULL,
+    Total DECIMAL(12,2) NOT NULL
+);
+
+-- 6. DETALLE_COMPRA
+CREATE TABLE DETALLE_COMPRA (
+    idDetalleCompra INT AUTO_INCREMENT PRIMARY KEY,
+    idCompra INT NOT NULL,
+    idProducto INT NOT NULL,
+    Cantidad INT NOT NULL,
+    CostoUnitario DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (idCompra)
+        REFERENCES COMPRA(idCompra),
+    FOREIGN KEY (idProducto)
+        REFERENCES PRODUCTO(idProducto)
+);
+
+-- 7. DETALLE_VENTA
+CREATE TABLE DETALLE_VENTA (
+    idDetalleVenta INT AUTO_INCREMENT PRIMARY KEY,
+    idVenta INT NOT NULL,
+    idProducto INT NOT NULL,
+    Cantidad INT NOT NULL,
+    CostoUnitario DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (idVenta)
+        REFERENCES VENTA(idVenta),
+    FOREIGN KEY (idProducto)
+        REFERENCES PRODUCTO(idProducto)
+);
